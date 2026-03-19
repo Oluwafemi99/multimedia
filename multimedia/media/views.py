@@ -64,9 +64,18 @@ class ProfileDetailView(generics.RetrieveAPIView):
     queryset = User.objects.all()
 
     def get_serializer_class(self):
-        if self.request.user.id == int(self.kwargs.get("id")):
-            return UserSerializer  # full data
-        return UserPublicSerializer  # limited data
+        if getattr(self, 'swagger_fake_view', False):
+            return UserPublicSerializer
+
+        user_id = self.kwargs.get("id")
+
+        try:
+            if user_id and self.request.user.id == int(user_id):
+                return UserSerializer
+        except (TypeError, ValueError):
+            pass
+
+        return UserPublicSerializer
 
 
 class MediaView(viewsets.ModelViewSet):
@@ -143,7 +152,7 @@ class LogoutView(generics.GenericAPIView):
             token.blacklist()
             return Response(
                 {"detail": "Logout successful"},
-                status=status.HTTP_205_RESET_CONTENT
+                status=status.HTTP_200_OK
             )
         except TokenError:
             return Response(
@@ -156,6 +165,7 @@ class ToggleLikeAPIView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Media.objects.all()  # we use this to get the media instance
     lookup_field = 'pk'
+    serializer_class = LikeToggleSerializer
 
     def post(self, request, pk):
         # Get the media object
@@ -168,8 +178,7 @@ class ToggleLikeAPIView(generics.GenericAPIView):
             # Already liked → remove
             like_instance.delete()
             return Response({
-                "liked": False,
-                "like": None,
+                "liked": created,
                 "like_count": media.likes.count()
             }, status=status.HTTP_200_OK)
 

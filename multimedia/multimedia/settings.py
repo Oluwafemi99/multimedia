@@ -16,6 +16,7 @@ from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+import dj_database_url
 
 
 # Quick-start development settings - unsuitable for production
@@ -27,7 +28,7 @@ SECRET_KEY = "django-insecure-&53=c9q*#fm&j8&5z692q40_^^70^8r0mmjo!xblc8u!pn63u)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*'] 
 
 
 # Application definition
@@ -44,10 +45,12 @@ INSTALLED_APPS = [
     'drf_yasg',
     'django_ratelimit',
     'rest_framework_simplejwt.token_blacklist',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -79,15 +82,19 @@ WSGI_APPLICATION = "multimedia.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": "multimedia",
+#         "USER": "femiizy",
+#         "HOST": "localhost",
+#         "PASSWORD": "password",
+#         "PORT": "5432",
+#     }
+# }
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "multimedia",
-        "USER": "femiizy",
-        "HOST": "localhost",
-        "PASSWORD": "password",
-        "PORT": "5432",
-    }
+    'default': dj_database_url.config(default='sqlite:///db.sqlite3')
 }
 
 REST_FRAMEWORK = {
