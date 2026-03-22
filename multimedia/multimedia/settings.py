@@ -94,7 +94,13 @@ WSGI_APPLICATION = "multimedia.wsgi.application"
 # }
 
 DATABASES = {
-    'default': dj_database_url.config(default='sqlite:///db.sqlite3')
+    'default': dj_database_url.config(
+        default=os.getenv(
+            'DATABASE_URL',
+            'postgres://femiizy:password@localhost:5432/multimedia'
+        ),
+        conn_max_age=600
+    )
 }
 
 REST_FRAMEWORK = {
