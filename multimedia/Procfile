@@ -1,1 +1,1 @@
-web: gunicorn multimedia.wsgi
+web: gunicorn multimedia.wsgi:application --chdir multimedia
