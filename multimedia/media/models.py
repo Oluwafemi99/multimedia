@@ -8,6 +8,7 @@ from .user_manager import UserManager
 class User(AbstractUser):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
+    username = None
     email = models.EmailField(unique=True)
     age = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
