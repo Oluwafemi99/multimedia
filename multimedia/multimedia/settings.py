@@ -23,7 +23,7 @@ import dj_database_url
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("secret_key")
+SECRET_KEY = os.getenv("secret_key", "*slh**&*)0mon!*#n5)i6!f^gf@xeg=2-g!=a-24i4kv(jox5(")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
